@@ -29,6 +29,9 @@ import org.springframework.boot.autoconfigure.PropertyPlaceholderAutoConfigurati
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.boot.logging.logback.LogbackLoggingSystem;
+import org.springframework.cloud.deployer.spi.app.AppDeployer;
+import org.springframework.cloud.deployer.spi.cloudfoundry.CloudFoundryAppDeployer;
+import org.springframework.cloud.deployer.spi.local.LocalAppDeployer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
@@ -114,8 +117,14 @@ public class DeployerApplication {
 								"banner.location=launcher-banner.txt",
 								"launcher.version=" + getVersion())
 						.run(this.args);
-
+		DeployerProperties deployerProperties = context.getBean(DeployerProperties.class);
 		final Deployer deployer = context.getBean(Deployer.class);
+		if (deployerProperties.getTarget().equals(DeployerTarget.local)) {
+			deployer.setDeployer(context.getBean(LocalAppDeployer.class));
+		}
+		else if (deployerProperties.getTarget().equals(DeployerTarget.cf)) {
+			deployer.setDeployer(context.getBean(CloudFoundryAppDeployer.class));
+		}
 		deployer.deploy();
 
 	}

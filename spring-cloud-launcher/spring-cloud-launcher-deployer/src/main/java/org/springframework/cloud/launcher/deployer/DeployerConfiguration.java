@@ -16,19 +16,25 @@
 
 package org.springframework.cloud.launcher.deployer;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.deployer.resource.maven.MavenProperties;
 import org.springframework.cloud.deployer.resource.maven.MavenResourceLoader;
 import org.springframework.cloud.deployer.resource.support.DelegatingResourceLoader;
 import org.springframework.cloud.deployer.spi.app.AppDeployer;
+import org.springframework.cloud.deployer.spi.local.LocalAppDeployer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.io.ResourceLoader;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author Spencer Gibb
@@ -39,9 +45,9 @@ import java.util.HashMap;
 public class DeployerConfiguration {
 
 	@Bean
-	public Deployer deployer(AppDeployer deployer, MavenResourceLoader resourceLoader,
+	public Deployer deployer(MavenResourceLoader resourceLoader,
 			DeployerProperties properties, ConfigurableEnvironment environment) {
-		return new Deployer(deployer, resourceLoader, properties, environment);
+		return new Deployer(resourceLoader, properties, environment);
 	}
 
 	@ConfigurationProperties(prefix = "spring.cloud.maven")

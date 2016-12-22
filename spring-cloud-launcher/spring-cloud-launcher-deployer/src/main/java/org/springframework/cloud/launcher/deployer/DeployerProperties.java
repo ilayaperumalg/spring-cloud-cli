@@ -57,6 +57,11 @@ public class DeployerProperties {
 	 */
 	private int statusSleepMillis = 300;
 
+	/**
+	 * Target platform to deploy (local, CF, kubernetes etc.,). Default is 'local'
+	 */
+	private DeployerTarget target = DeployerTarget.local;
+
 	public boolean isList() {
 		return this.list;
 	}
@@ -87,6 +92,14 @@ public class DeployerProperties {
 
 	public void setStatusSleepMillis(int statusSleepMillis) {
 		this.statusSleepMillis = statusSleepMillis;
+	}
+
+	public DeployerTarget getTarget() {
+		return target;
+	}
+
+	public void setTarget(DeployerTarget target) {
+		this.target = target;
 	}
 
 	@PostConstruct

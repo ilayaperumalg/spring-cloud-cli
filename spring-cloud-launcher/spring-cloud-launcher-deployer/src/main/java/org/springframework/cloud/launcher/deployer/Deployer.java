@@ -58,7 +58,7 @@ public class Deployer {
 
 	public static final String DIRECTORY_NAME = ".spring-cloud";
 
-	final AppDeployer deployer;
+	AppDeployer deployer;
 
 	final ResourceLoader resourceLoader;
 
@@ -68,12 +68,19 @@ public class Deployer {
 
 	private Map<String, DeploymentState> deployed = new ConcurrentHashMap<>();
 
-	public Deployer(AppDeployer deployer, ResourceLoader resourceLoader,
+	public Deployer(ResourceLoader resourceLoader,
 			DeployerProperties properties, ConfigurableEnvironment environment) {
-		this.deployer = deployer;
 		this.resourceLoader = resourceLoader;
 		this.properties = properties;
 		this.environment = environment;
+	}
+
+	public AppDeployer getDeployer() {
+		return deployer;
+	}
+
+	public void setDeployer(AppDeployer deployer) {
+		this.deployer = deployer;
 	}
 
 	public void deploy() {
